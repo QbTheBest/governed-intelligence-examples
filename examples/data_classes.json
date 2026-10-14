@@ -1,0 +1,10 @@
+{
+  "note": "Reviewed and approved by a person before use (Chapter 22). Columns not listed are Internal.",
+  "approved_by": "replace with the reviewer's name",
+  "approved_on": "replace with the date",
+  "restricted": {
+    "customers.name": "PERSON",
+    "customers.email": "EMAIL",
+    "customers.phone": "PHONE"
+  }
+}
