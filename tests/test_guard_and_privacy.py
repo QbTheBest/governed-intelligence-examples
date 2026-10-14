@@ -99,6 +99,12 @@ class TestRunQuery(Db):
         self.assertEqual(len(rows), 10)
         self.assertTrue(truncated)
 
+    def test_connection_can_be_reused(self):
+        for _ in range(3):
+            _, rows, _, _ = sql_guard.run_query(self.conn, "SELECT COUNT(*) FROM products", RESTRICTED)
+            self.assertEqual(rows[0][0], 8)
+        self.assertEqual(self.conn.execute("SELECT COUNT(*) FROM invoices").fetchone()[0], 600)
+
     def test_read_only_connection_is_the_last_wall(self):
         # Even if every check above had a bug, the file cannot be changed.
         with self.assertRaises(sqlite3.OperationalError):

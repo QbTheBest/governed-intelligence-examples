@@ -150,7 +150,8 @@ def run_query(conn, sql, restricted=(), approved=(), max_rows=200, timeout_s=5.0
             raise SqlRejected("timeout") from None
         raise SqlRejected("database_error", type(e).__name__) from None
     finally:
-        conn.set_authorizer(None)
+        # Python 3.10 cannot clear an authorizer with None, so install one that allows everything.
+        conn.set_authorizer(lambda *args: sqlite3.SQLITE_OK)
         conn.set_progress_handler(None, 0)
     truncated = len(rows) > max_rows
     return columns, rows[:max_rows], truncated, sorted(read_restricted)

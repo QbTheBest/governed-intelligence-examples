@@ -16,7 +16,7 @@ cd governed-intelligence-examples
 python examples/make_demo_db.py          # a small, fully invented sales database
 python examples/run_chat.py "What was the total revenue in 2025?"
 python examples/evaluate.py              # the golden set, with an honest pass rate
-python -m unittest discover -s tests     # 29 tests
+python -m unittest discover -s tests     # 30 tests
 ```
 
 By default the examples use a **scripted stand-in model**. It answers only the questions in `examples/golden.json` and refuses everything else. It is not AI: it is there so that the pipeline, the checks and the tests run on any machine, without an API key. To use a real model, see [Use a real model](#use-a-real-model).
