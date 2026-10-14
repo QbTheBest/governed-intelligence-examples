@@ -1,5 +1,7 @@
 # Governed Intelligence: code examples
 
+[![tests](https://github.com/QbTheBest/governed-intelligence-examples/actions/workflows/tests.yml/badge.svg)](https://github.com/QbTheBest/governed-intelligence-examples/actions/workflows/tests.yml)
+
 Companion code for the book *Governed Intelligence: Integrating Trust, Order, and Foresight in Complex Systems* by Kubilay Devrim Ekmekci.
 
 The book explains how to build AI systems that a company can depend on: the model reads and proposes, plain code checks and decides, and every answer leaves a record. This repository shows those patterns in small, runnable Python. It uses only the Python standard library, so there is nothing to install.
