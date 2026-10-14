@@ -30,6 +30,14 @@ ALLOWED_FUNCTIONS = {
 }
 
 
+# Action codes from the SQLite C API. Older Python versions do not export all of
+# them as constants, so the numbers are given here.
+SQLITE_READ = getattr(sqlite3, "SQLITE_READ", 20)
+SQLITE_SELECT = getattr(sqlite3, "SQLITE_SELECT", 21)
+SQLITE_FUNCTION = getattr(sqlite3, "SQLITE_FUNCTION", 31)
+SQLITE_RECURSIVE = getattr(sqlite3, "SQLITE_RECURSIVE", 33)
+
+
 class SqlRejected(Exception):
     """The query was refused. `reason` is safe to log: it never holds data."""
 
@@ -102,9 +110,9 @@ def run_query(conn, sql, restricted=(), approved=(), max_rows=200, timeout_s=5.0
     refused_columns, refused_actions, read_restricted = set(), [], set()
 
     def authorizer(action, arg1, arg2, dbname, source):
-        if action == sqlite3.SQLITE_SELECT:
+        if action == SQLITE_SELECT:
             return sqlite3.SQLITE_OK
-        if action == sqlite3.SQLITE_READ:
+        if action == SQLITE_READ:
             name = f"{arg1}.{arg2}".lower()
             if name in restricted:
                 if name not in approved:
@@ -112,12 +120,12 @@ def run_query(conn, sql, restricted=(), approved=(), max_rows=200, timeout_s=5.0
                     return sqlite3.SQLITE_DENY
                 read_restricted.add(name)
             return sqlite3.SQLITE_OK
-        if action == sqlite3.SQLITE_FUNCTION:
+        if action == SQLITE_FUNCTION:
             if (arg2 or "").lower() in ALLOWED_FUNCTIONS:
                 return sqlite3.SQLITE_OK
             refused_actions.append(f"function:{arg2}")
             return sqlite3.SQLITE_DENY
-        if action == sqlite3.SQLITE_RECURSIVE:
+        if action == SQLITE_RECURSIVE:
             return sqlite3.SQLITE_OK
         refused_actions.append(f"action:{action}")
         return sqlite3.SQLITE_DENY
